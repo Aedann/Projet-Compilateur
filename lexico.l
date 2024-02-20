@@ -33,12 +33,12 @@ extern int yydebug;
 
 %option yylineno
 
-
 LETTRE          [a-zA-Z]
+CHIFFRE         [0-9]
 /* A completer ; fausses definitions pour passer la compilation */
-IDF             A
-ENTIER          0
-CHAINE          B
+IDF             {LETTRE}({LETTRE}|{CHIFFRE}|[_])*
+ENTIER          [+-]?{CHIFFRE}+
+CHAINE          "{LETTRE}*"
 COMMENTAIRE     C
 
 %%
@@ -61,6 +61,7 @@ COMMENTAIRE     C
 {ENTIER} {
                 #if !LEX_DEBUG
                 /* A completer : affecter yylval.intval et faire des verifications */
+                yylval.intval = strdupl(yytext);
                 #endif
                 RETURN(TOK_INTVAL);
 }
@@ -68,6 +69,7 @@ COMMENTAIRE     C
 {CHAINE} {
                 #if !LEX_DEBUG
                 /* A completer : affecter yylval.strval */
+                yylval.strval = strdupl(yytext);
                 #endif
                 RETURN(TOK_STRING);
 }
