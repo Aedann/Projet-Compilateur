@@ -43,15 +43,34 @@ node_t make_node(node_nature nature, int nops, ...);
 
 /* Definir les token ici avec leur associativite, dans le bon ordre */
 /* A completer */
-%token TOK_VOID TOK_INT TOK_BOOL TOK_TRUE TOK_FALSE
+%token TOK_VOID TOK_INT TOK_BOOL TOK_TRUE TOK_FALSE TOK_IF TOK_DO TOK_WHILE TOK_FOR
+%token TOK_PRINT TOK_SEMICOL TOK_COMMA TOK_LPAR TOK_RPAR TOK_LACC TOK_RACC
 
 
-
-
-
+%nonassoc TOK_THEN
+%nonassoc TOK_ELSE
+/* a = b = c + d <=> b = c + d; a = b; */
+%right TOK_AFFECT
+%left TOK_OR
+%left TOK_AND
+%left TOK_BOR
+%left TOK_BXOR
+%left TOK_BAND
+%nonassoc TOK_EQ TOK_NE
+%nonassoc TOK_GT TOK_LT TOK_GE TOK_LE
+%nonassoc TOK_SRL TOK_SRA TOK_SLL
+/* a / b / c = (a / b) / c et a - b - c = (a - b) - c */
+%left TOK_PLUS TOK_MINUS
+%left TOK_MUL TOK_DIV TOK_MOD
+%nonassoc TOK_UMINUS TOK_NOT TOK_BNOT
 
 %token <intval> TOK_INTVAL;
 %token <strval> TOK_IDENT TOK_STRING;
+
+/* %type <ptr> program listdecl listdeclnonnull vardecl ident type listtypedecl decl maindecl
+%type <ptr> listinst listinstnonnull inst block expr listparamprint paramprint */
+
+
 
 %type <ptr> program listdeclnonnull maindecl
 

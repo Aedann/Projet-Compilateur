@@ -1,3 +1,7 @@
-int void int void void int E4R_RR
+456
 
+0x1234
 
+int test = 5;
+
+"AAAEZ"
