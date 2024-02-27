@@ -74,18 +74,18 @@ typedef struct _node_s {
     node_nature nature;
     node_type type;
 
-    int64_t value;
-    int32_t offset;
+    int64_t value; // valeur du littéral 
+    int32_t offset; // entier, position de la variable en mémoire (en section .data ou en pile) pour les NODE_IDENT et les NODE_STRINGVAL ; taille en pile correspondant à toutes les variables locales pour les NODE_FUNC
     bool global_decl;
     int32_t lineno;
 
-    int32_t nops;
+    int32_t nops; // nombre d'enfants
     struct _node_s ** opr;
     
-    struct _node_s * decl_node;
+    struct _node_s * decl_node; // pointeur vers un NODE_IDENT, correspondant à la déclaration de la variable
 
-    char * ident;
-    char * str;
+    char * ident; // identifiant
+    char * str; // valeur du littéral
 
     // Pour l'affichage du graphe
     int32_t node_num;

@@ -102,7 +102,7 @@ COMMENTAIRE     "//".*\n
 {ENTIER} {
                 #if !LEX_DEBUG
                 /* A completer : affecter yylval.intval et faire des verifications */
-                yylval.intval = strdupl(yytext);
+                yylval.intval = atoi(yytext);
                 #endif
                 RETURN(TOK_INTVAL);
 }
