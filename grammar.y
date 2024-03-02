@@ -28,6 +28,10 @@ extern int yylineno;
 void yyerror(node_t * program_root, char * s);
 void analyse_tree(node_t root);
 node_t make_node(node_nature nature, int nops, ...);
+node_t make_type(node_type TYPE_INT);
+node_t make_ident(char * ident);
+node_t make_intval(int64_t valeur);
+node_t make_boolval(bool valeur);
 /* A completer */
 
 %}
@@ -107,7 +111,7 @@ listdeclnonnull:
 vardecl : 
     type listtypedecl TOK_SEMICOL
     {
-        $$ = make_node(NODE_DECLS);
+        $$ = make_node(NODE_DECLS, 2, $1, $2); //Génère un NODE_TYPE et un NODE_DECL //PAS SUR DE MOI
     }
     ;
 type : 
@@ -211,7 +215,7 @@ inst :
 block : 
     TOK_LACC listdecl listinst TOK_RACC
     {
-        $$ = node_block(NODE_BLOCK, 2, $2, $3);
+        $$ = make_node(NODE_BLOCK, 2, $2, $3); //T'avais écrit node_block au lieu de make_node
     }
     ;
 expr : 
@@ -325,7 +329,7 @@ expr :
     }
     | ident
     {
-        $$ = make_ident($1);
+        $$ = NULL; //make_ident($1); C'est pas ça, on prend pas un TOK_IDENT mais un NODE_IDENT
     }
     ;
 listparamprint : 
@@ -345,13 +349,13 @@ paramprint :
     }
     | TOK_STRING
     {
-        $$ = make_stringval(TOK_STRING);
+        $$ = NULL;//make_stringval(TOK_STRING); //PAS ENCORE IMPLEMENTEE
     }
     ;
 ident : 
     TOK_IDENT
     {
-        $$ = make_ident(TOK_IDENT);
+        $$ = make_ident($1);
     }
     ;
 
@@ -370,7 +374,7 @@ node_t make_node(node_nature nature, int nops, ...) {
         node->opr[i] = malloc(sizeof(node_s));
         node->opr[i] = va_arg(ap, node_t);
     }
-    va_end(valist); 
+    va_end(ap); 
 
     return node;
 }
@@ -399,7 +403,7 @@ node_t make_boolval(bool valeur) {
     return node;
 }
 
-node_t make_feuille(node_nature nature) {
+/* node_t make_feuille(node_nature nature) {
     va_list ap;
     va_start(ap,nops);
 
@@ -439,13 +443,12 @@ node_t make_feuille(node_nature nature) {
             break;
 
         default:
-            break:
-    }
-
-}
+            break;
+    } 
+} */
 
 void analyse_tree(node_t root) {
-    //dump_tree(root, "apres_syntaxe.dot");
+    dump_tree(root, "apres_syntaxe.dot");
     if (!stop_after_syntax) {
         analyse_passe_1(root);
         //dump_tree(root, "apres_passe_1.dot");
