@@ -93,7 +93,7 @@ program:
 listdecl : 
     listdeclnonnull
         {
-            $$ = NULL;
+            $$ = $1;
         }
         |
         {
@@ -104,7 +104,11 @@ listdecl :
 listdeclnonnull:
         vardecl
         {
-            $$ = make_node(NODE_LIST, 1, $1); 
+            $$ = $1;
+        }
+        | listdeclnonnull vardecl
+        {
+            $$ = make_node(NODE_LIST, 2, $1, $2); 
         }
         ;
 
@@ -131,17 +135,17 @@ type :
 listtypedecl : 
     decl
     {
-        $$ = NULL;
+        $$ = $1;
     }
     | listtypedecl TOK_COMMA decl
     {
-        $$ = NULL;
+        $$ = make_node(NODE_LIST, 2, $1, $3);
     }
     ;
 decl : 
     ident
     {
-        $$ = make_node(NODE_DECL, 1, $1);
+        $$ = make_node(NODE_DECL, 2, $1, NULL);
     }
     | ident TOK_AFFECT expr
     {
@@ -157,7 +161,7 @@ maindecl :
 listinst : 
     listinstnonnull
     {
-        $$ = NULL;
+        $$ = $1;
     }
     |
     {
@@ -167,7 +171,7 @@ listinst :
 listinstnonnull : 
     inst
     {
-        $$ = NULL;
+        $$ = $1;
     }
     | listinstnonnull inst
     {
@@ -177,7 +181,7 @@ listinstnonnull :
 inst : 
     expr TOK_SEMICOL
     {
-        $$ = NULL;
+        $$ = $1;
     }
     | TOK_IF TOK_LPAR expr TOK_RPAR inst TOK_ELSE inst
     {
@@ -201,7 +205,7 @@ inst :
     }
     | block
     {
-        $$ = NULL;
+        $$ = $1;
     }
     | TOK_SEMICOL
     {
@@ -249,7 +253,7 @@ expr :
     }
     | TOK_MINUS expr %prec TOK_UMINUS
     {
-        $$ = NULL;
+        $$ = $2;
     }
     | expr TOK_GE expr
     {
@@ -309,7 +313,7 @@ expr :
     }
     | TOK_LPAR expr TOK_RPAR
     {
-        $$ = NULL;
+        $$ = $2;
     }
     | ident TOK_AFFECT expr
     {
@@ -329,7 +333,7 @@ expr :
     }
     | ident
     {
-        $$ = NULL; //make_ident($1); C'est pas ça, on prend pas un TOK_IDENT mais un NODE_IDENT
+        $$ = $1;
     }
     ;
 listparamprint : 
@@ -339,17 +343,17 @@ listparamprint :
     }
     | paramprint
     {
-        $$ = NULL;
+        $$ = $1;// PAS SUR DE MOI
     }
     ;
 paramprint : 
     ident
     {
-        $$ = NULL;
+        $$ = make_ident($1); //PAS ENCORE IMPLEMENTEE
     }
     | TOK_STRING
     {
-        $$ = NULL;//make_stringval(TOK_STRING); //PAS ENCORE IMPLEMENTEE
+        $$ = NULL;//make_stringval($1); //PAS ENCORE IMPLEMENTEE
     }
     ;
 ident : 
@@ -367,11 +371,11 @@ node_t make_node(node_nature nature, int nops, ...) {
     va_list ap;
     va_start(ap,nops);
 
-    node_t node = calloc(1, sizeof(node_s));
+    node_t node = malloc(sizeof(node_s));
     node->nature = nature;
     node->nops = nops;
+    node->opr = malloc(sizeof(node_t) * nops);
     for (int i = 0; i < nops; i++) {
-        node->opr[i] = malloc(sizeof(node_s));
         node->opr[i] = va_arg(ap, node_t);
     }
     va_end(ap); 
@@ -451,7 +455,7 @@ void analyse_tree(node_t root) {
     dump_tree(root, "apres_syntaxe.dot");
     if (!stop_after_syntax) {
         analyse_passe_1(root);
-        //dump_tree(root, "apres_passe_1.dot");
+        dump_tree(root, "apres_passe_1.dot");
         if (!stop_after_verif) {
             create_program(); 
             gen_code_passe_2(root);

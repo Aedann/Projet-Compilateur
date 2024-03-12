@@ -44,7 +44,7 @@ ENTIER_DEC      0|({CHIFFRE_NON_NUL}{CHIFFRE}*)
 ENTIER_HEXA     0x({CHIFFRE}|{LETTRE_HEXA})+
 ENTIER          {ENTIER_DEC}|{ENTIER_HEXA}
 CHAINE_CAR      [\40-\41\43-\133\135-\176]
-CHAINE          \"({CHAINE_CAR}|\\\"|\n)*\"
+CHAINE          \"({CHAINE_CAR}|\\\"|[\\n])*\"
 COMMENTAIRE     "//".*\n
 
 %%
@@ -60,7 +60,7 @@ COMMENTAIRE     "//".*\n
 "for"           RETURN(TOK_FOR);
 "print"         RETURN(TOK_PRINT);
 ";"             RETURN(TOK_SEMICOL);
-"/"             RETURN(TOK_COMMA);
+","             RETURN(TOK_COMMA);
 "("             RETURN(TOK_LPAR);
 ")"             RETURN(TOK_RPAR);
 "{"             RETURN(TOK_LACC);

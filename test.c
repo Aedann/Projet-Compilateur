@@ -1,12 +1,12 @@
-void main(){
-    int test = 25;
-    print("TESTTTT");
-    int hexa = 0x1234;
-    if(test == 25){
-        test = 0;
+// Un exemple de programme MiniC
+int start = 0;
+int end = 100;
+
+void main () {
+    int i, s = start , e = end ;
+    int sum = 0;
+    for (i = s; i < e; i = i + 1) {
+        sum = sum + i;
     }
-    else{
-        test = 1;
-    }
-    return test;
-};
+    print ("sum: ", sum , "\n") ;
+}
