@@ -159,15 +159,15 @@ digraph global_vars {
     N56 [shape=record, label="{{NODE PRINT|Nb. ops: 1}}"];
     N57 [shape=record, label="{{NODE LIST}}"];
     N58 [shape=record, label="{{NODE LIST}}"];
-    N59 [shape=record, label="{{NULL}}"];
+    N59 [shape=record, label="{{NODE STRINGVAL|Type: TYPE NONE}|{val: sum: }}"];
     edge[tailclip=true];
     N58 -> N59
-    N60 [shape=record, label="{{NODE IDENT|Type: TYPE NONE}|{<decl>Decl      |Ident: |Offset: 0}}"];
+    N60 [shape=record, label="{{NODE IDENT|Type: TYPE NONE}|{<decl>Decl      |Ident: sum|Offset: 0}}"];
     edge[tailclip=true];
     N58 -> N60
     edge[tailclip=true];
     N57 -> N58
-    N61 [shape=record, label="{{NULL}}"];
+    N61 [shape=record, label="{{NODE STRINGVAL|Type: TYPE NONE}|{val: \n}}"];
     edge[tailclip=true];
     N57 -> N61
     edge[tailclip=true];

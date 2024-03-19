@@ -24,6 +24,7 @@ extern char * outfile;
 /* prototypes */
 int yylex(void);
 extern int yylineno;
+int node_count = 0;
 
 void yyerror(node_t * program_root, char * s);
 void analyse_tree(node_t root);
@@ -32,6 +33,7 @@ node_t make_type(node_type TYPE_INT);
 node_t make_ident(char * ident);
 node_t make_intval(int64_t valeur);
 node_t make_boolval(bool valeur);
+node_t make_stringval(char* str);
 /* A completer */
 
 %}
@@ -349,11 +351,11 @@ listparamprint :
 paramprint : 
     ident
     {
-        $$ = make_ident($1); //PAS ENCORE IMPLEMENTEE
+        $$ = $1;
     }
     | TOK_STRING
     {
-        $$ = NULL;//make_stringval($1); //PAS ENCORE IMPLEMENTEE
+        $$ = make_stringval($1);
     }
     ;
 ident : 
@@ -374,6 +376,15 @@ node_t make_node(node_nature nature, int nops, ...) {
     node_t node = malloc(sizeof(node_s));
     node->nature = nature;
     node->nops = nops;
+    node->decl_node = NULL;
+    node->type = TYPE_NONE;
+    node->value = 0;
+    node->str = NULL;
+    node->ident = NULL;
+    node->lineno = 0;
+    node->global_decl = false;
+    node->offset = 0;
+    node->node_num = node_count++;
     node->opr = malloc(sizeof(node_t) * nops);
     for (int i = 0; i < nops; i++) {
         node->opr[i] = va_arg(ap, node_t);
@@ -406,6 +417,13 @@ node_t make_boolval(bool valeur) {
     node->value = valeur;
     return node;
 }
+
+node_t make_stringval(char* str) {
+    node_t node = make_node(NODE_STRINGVAL, 0);
+    node->str = str;
+    return node;
+}
+
 
 /* node_t make_feuille(node_nature nature) {
     va_list ap;
@@ -456,12 +474,12 @@ void analyse_tree(node_t root) {
     if (!stop_after_syntax) {
         analyse_passe_1(root);
         dump_tree(root, "apres_passe_1.dot");
-        if (!stop_after_verif) {
+        /* if (!stop_after_verif) {
             create_program(); 
             gen_code_passe_2(root);
             dump_mips_program(outfile);
             free_program();
-        }
+        } */
         free_global_strings();
     }
     free_nodes(root);
