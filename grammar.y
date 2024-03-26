@@ -381,7 +381,7 @@ node_t make_node(node_nature nature, int nops, ...) {
     node->value = 0;
     node->str = NULL;
     node->ident = NULL;
-    node->lineno = 0;
+    node->lineno = yylineno;
     node->global_decl = false;
     node->offset = 0;
     node->node_num = node_count++;
@@ -471,6 +471,9 @@ node_t make_stringval(char* str) {
 
 void analyse_tree(node_t root) {
     dump_tree(root, "apres_syntaxe.dot");
+
+    init_exprverif();
+
     if (!stop_after_syntax) {
         analyse_passe_1(root);
         dump_tree(root, "apres_passe_1.dot");

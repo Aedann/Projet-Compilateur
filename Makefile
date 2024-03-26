@@ -38,7 +38,7 @@ lex.yy.o: lex.yy.c
 	@echo "| Compiling $@"
 	@gcc -D_GNU_SOURCE $(YACC_FLAGS) $(CFLAGS) $(INCLUDE) -o $@ -c $<
 
-y.tab.o: y.tab.c
+y.tab.o: y.tab.c Makefile
 	@echo "| Compiling $@"
 	@gcc $(YACC_FLAGS) $(CFLAGS) $(INCLUDE) -o $@ -c $<
 
