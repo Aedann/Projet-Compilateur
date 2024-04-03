@@ -2248,13 +2248,13 @@ void analyse_tree(node_t root) {
     if (!stop_after_syntax) {
         analyse_passe_1(root);
         dump_tree(root, "apres_passe_1.dot");
-        /* if (!stop_after_verif) {
+        if (!stop_after_verif) {
             create_program(); 
             gen_code_passe_2(root);
             dump_mips_program(outfile);
             free_program();
-        } */
-        free_global_strings();
+        }
+        /* free_global_strings(); */
     }
     free_nodes(root);
 }
