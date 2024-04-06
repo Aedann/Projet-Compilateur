@@ -31,9 +31,9 @@ chaines littérales en section .data.
 
 ### KO : 
  * 22 Sur les opérateurs avec int et bool et peut être int int ou bool bool 
- * Verifier quand on met plusieurs fonctions
- * printf("Expected 2 operands around '=' sign on line %d\n", expr->lineno);   
- * printf("Different types around '=' sign on line %d\n", expr->lineno);   
- * printf("Error : declared function other than main on line %d\n", root->lineno);
- * 
 
+#  A TESTER ET LE CODE A ECRIRE AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+ * Variable Declarée plusieurs fois
+ * Variable globale avec valeur non-litterale 
+ * Variable delcarée de type void (test KO deja ecrit 28.c) 
+ * 

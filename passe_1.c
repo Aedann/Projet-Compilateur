@@ -19,7 +19,7 @@ void verif_expr(node_t expr) {
         }
         else if(expr->opr[0]->type != expr->opr[1]->type) {
             printf("Different types around '=' sign on line %d\n", expr->lineno);   
-            exit(0);
+            exit(0); //Atention dans le poly c'est 2 regles différentes (p.25) regles 1.12 et 1.13 
         }  
         expr->type = expr->opr[0]->type; 
         return;
@@ -62,6 +62,13 @@ void analyse_passe_1(node_t root) {
             break;
 
         case NODE_IDENT:
+//NATHAN ICI ON AURA JAMAIS LE CAS IDENT UTILISE MAIS NON DECLARE !!!!!!!
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
             if(get_decl_node(root->ident)) { // réutilisation
                 root->decl_node = get_decl_node(root->ident);
                 root->offset = (root->decl_node)->offset;
@@ -156,7 +163,31 @@ void analyse_passe_1(node_t root) {
         case NODE_DECL:
             
             break;
-        
+        //ICI On a pas testé si les conditions des if,while... sont bien booléennes, donc voici ma modeste correction : 
+        case NODE_WHILE:
+            if(root->opr[0]->type != TYPE_BOOL) {
+                printf("Error : condition is not boolean in the WHILE on line %d\n", root->lineno);
+                exit(0);
+            }
+            break;
+        case NODE_IF:
+            if(root->opr[0]->type != TYPE_BOOL) {
+                printf("Error : condition is not boolean in the IF on line %d\n", root->lineno);
+                exit(0);
+            }
+            break;
+        case NODE_DOWHILE:
+            if(root->opr[1]->type != TYPE_BOOL) {
+                printf("Error : condition is not boolean in the DO_WHILE on line %d\n", root->lineno);
+                exit(0);
+            }
+            break;
+        case NODE_FOR:
+            if(root->opr[1]->type != TYPE_BOOL) {
+                printf("Error : condition is not boolean in the FOR on line %d\n", root->lineno);
+                exit(0);
+            }
+            break;
         default:
             break;
     }
