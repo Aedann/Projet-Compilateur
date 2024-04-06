@@ -26,3 +26,14 @@ chaines littérales en section .data.
 
 
 # Test OK/KO : 
+
+## Verif (passe 1) : 
+
+### KO : 
+ * 22 Sur les opérateurs avec int et bool et peut être int int ou bool bool 
+ * Verifier quand on met plusieurs fonctions
+ * printf("Expected 2 operands around '=' sign on line %d\n", expr->lineno);   
+ * printf("Different types around '=' sign on line %d\n", expr->lineno);   
+ * printf("Error : declared function other than main on line %d\n", root->lineno);
+ * 
+

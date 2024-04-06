@@ -48,6 +48,8 @@ void verif_expr(node_t expr) {
 void analyse_passe_1(node_t root) {
 
     if(root == NULL) return;
+
+    // Opérations en OUVERTURE / AVANT considération des enfants
     switch(root->nature) {
         case NODE_PROGRAM:
             global_env = true;
@@ -84,6 +86,11 @@ void analyse_passe_1(node_t root) {
                 printf("Error : declared function other than main on line %d\n", root->lineno);
                 exit(0);
             }
+            root->type = root->opr[0]->type;
+            if(root->type != TYPE_VOID){
+                printf("Error : declared function is not void %d\n", root->lineno);
+                exit(0);
+            }
             break;
 
         case NODE_TYPE:
@@ -101,13 +108,16 @@ void analyse_passe_1(node_t root) {
         default:
             break;
     }
+
+    // Considération des enfants
     
     for(int n = 0; n < (root->nops); n++) {
         if(root->opr[n] != NULL) analyse_passe_1(root->opr[n]);
     }
 
-    switch(root->nature) {
+    // Opérations en FERMETURE / APRES considération des enfants
 
+    switch(root->nature) {
         case NODE_BLOCK:
             pop_context();
             break;
@@ -117,7 +127,7 @@ void analyse_passe_1(node_t root) {
             root->offset = get_env_current_offset();
             break;
 
-        case NODE_PLUS: // Integer exprs
+        case NODE_PLUS:
         case NODE_MINUS:
         case NODE_MUL:
         case NODE_DIV:
@@ -140,11 +150,11 @@ void analyse_passe_1(node_t root) {
         case NODE_OR :
         case NODE_NOT:
         case NODE_AFFECT:
-            verif_expr(root);
+            verif_expr(root); // le typage des identifiants ou des expressions enfants doît être fait au préalable
             break;
 
         case NODE_DECL:
-
+            
             break;
         
         default:
