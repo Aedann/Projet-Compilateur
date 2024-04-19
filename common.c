@@ -16,7 +16,7 @@
 
 extern char * infile;
 extern char * outfile;
-int32_t trace_level = DEFAULT_TRACE_LEVEL;
+extern int32_t trace_level;
 extern bool stop_after_syntax;
 extern bool stop_after_verif;
 
@@ -25,6 +25,7 @@ void parse_args(int argc, char ** argv) {
 
     // setting default values (those not already set in lex)
     set_max_registers(8);
+    trace_level = DEFAULT_TRACE_LEVEL;
 
     if(argc <= 1 || (strcmp(argv[1],"-h") == 0)) {
         printf("%s",MINICC_HELP);
@@ -66,7 +67,7 @@ void parse_args(int argc, char ** argv) {
             }
             int regn = atoi(argv[a]);
             if(regn < 4 || regn > 8) {
-                printf("Command-line error : numbers of registers specified (%d) invalid - must be between 4 and 8\n",regn);
+                printf("Command-line error : numbers of registers specified (%d) invalid - must be between 4 and 8 (default 8)\n",regn);
                 exit(-1);
             }
  
@@ -80,7 +81,7 @@ void parse_args(int argc, char ** argv) {
             }
             int tracen = atoi(argv[a]);
             if(tracen < 0 || tracen > 5) {
-                printf("Command-line error : trace level specified (%d) invalid - must be between 4 and 8\n",tracen);
+                printf("Command-line error : trace level specified (%d) invalid - must be between 0 and 5 (default 0)\n",tracen);
                 exit(-1);
             }
  
@@ -101,6 +102,11 @@ void parse_args(int argc, char ** argv) {
                 exit(-1);
             }
             stop_after_verif = true;
+        }
+
+        else if(argv[a][0] == '-')  {
+                printf("Command-line error : unrecognized option \"%s\"\n",argv[a]);
+                exit(-1);
         }
 
         else { // let's assume anything left untreated is a filename
@@ -134,6 +140,7 @@ void free_nodes(node_t n) {
     for(int e = 0; e < (n->nops); e++) {
         if(n->opr[e] != NULL) free_nodes(n->opr[e]);
     }
+    if(n->nature = NODE_STRINGVAL) free(n->str);
     free(n->opr);
     free(n);
 }

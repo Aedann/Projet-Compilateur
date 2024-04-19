@@ -14,7 +14,7 @@
     }                                       \
 })
 
-
+int32_t trace_level;
 
 typedef enum node_nature_s {
     NONE,

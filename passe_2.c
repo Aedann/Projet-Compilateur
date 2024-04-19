@@ -32,122 +32,181 @@ int32_t deallocate() {
     }
 }
  
+
 int32_t gen_code_expr(node_t root) {
         expr_depth++;
 
         switch(root->nature) {
 
             case NODE_PLUS:
-                addu_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                addu_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_MINUS:
-                subu_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                subu_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_MUL:
-                mult_inst_create(get_current_reg(), gen_code_expr(root->opr[1]));
-                release_reg();
-                break;
-
-            case NODE_DIV:
-                div_inst_create(get_current_reg(), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                mult_inst_create(get_current_reg()-1, get_current_reg());
+                deallocate();
                 mflo_inst_create(get_current_reg());
                 break;
 
-            case NODE_MOD:
-                div_inst_create(get_current_reg()-1, gen_code_expr(root->opr[1]));
-                release_reg();
+            case NODE_DIV:
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                div_inst_create(get_current_reg()-1, get_current_reg());
+                deallocate();
                 mfhi_inst_create(get_current_reg());
+                break;
+
+            case NODE_MOD:
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                div_inst_create(get_current_reg()-1, get_current_reg());
+                deallocate();
+                mflo_inst_create(get_current_reg());
                 break;
 
             case NODE_UMINUS:
                 subu_inst_create(get_current_reg(), 0, gen_code_expr(root->opr[0]));
-                release_reg();
                 break;
 
             case NODE_BAND:
-                and_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                and_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_BOR:
-                or_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                or_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_BXOR:
-                xor_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                xor_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_SLL:
-                sllv_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                sllv_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_SRL:
-                srlv_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                srlv_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_SRA:
-                srav_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                srav_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
-            case NODE_BNOT:
-                nor_inst_create(get_current_reg()-1, 0, gen_code_expr(root->opr[0]));
+            case NODE_BNOT: // nor 0 = not
+                nor_inst_create(get_current_reg(), 0, gen_code_expr(root->opr[0]));
                 break;
 
             case NODE_LT :
-                slt_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                slt_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_GT :
-                slt_inst_create(get_current_reg()-1, gen_code_expr(root->opr[1]), gen_code_expr(root->opr[0]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                slt_inst_create(get_current_reg()-1, get_current_reg(), get_current_reg()-1); // on inverse Rs et Rt
+                deallocate();
                 break;
             
             case NODE_LE :
-                addiu_inst_create(get_current_reg(), gen_code_expr(root->opr[1]), 1);
-                slt_inst_create(get_current_reg(), get_current_reg(), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                addiu_inst_create(get_current_reg(), get_current_reg(), 1); // ajouter 1 à Rt pour =<
+                slt_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_GE :
-                addiu_inst_create(get_current_reg(), gen_code_expr(root->opr[0]), -1);
-                slt_inst_create(get_current_reg(), get_current_reg(), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                addiu_inst_create(get_current_reg()-1, get_current_reg()-1, -1); // soustraire 1 à Rs pour >=
+                slt_inst_create(get_current_reg()-1, get_current_reg(), get_current_reg()-1); 
+                deallocate();
                 break;
 
             case NODE_EQ :
-                xor_inst_create(get_current_reg(), gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                slti_inst_create(get_current_reg(),get_current_reg(),1);
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                xor_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
+                slti_inst_create(get_current_reg(), get_current_reg(), 1); // inversion xor bitwise : si au moins un bit différent, rd = 0
                 break;
 
             case NODE_NE :
-                xor_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                xor_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg()); // EQ sans inversion
+                deallocate();
                 break;
                 
             case NODE_AND:
-                and_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                and_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
                 
             case NODE_OR :
-                or_inst_create(get_current_reg()-1, gen_code_expr(root->opr[0]), gen_code_expr(root->opr[1]));
-                release_reg();
+                gen_code_expr(root->opr[0]);
+                allocate();
+                gen_code_expr(root->opr[1]);
+                or_inst_create(get_current_reg()-1, get_current_reg()-1, get_current_reg());
+                deallocate();
                 break;
 
             case NODE_NOT:
-                nor_inst_create(get_current_reg(), 0, gen_code_expr(root->opr[0]));
+                gen_code_expr(root->opr[0]);
+                nor_inst_create(get_current_reg(), 0, get_current_reg()); // nor bitwise 0 = inversion bitwise
                 break;
 
             case NODE_AFFECT:
@@ -160,14 +219,12 @@ int32_t gen_code_expr(node_t root) {
                 else {
                     sw_inst_create(gen_code_expr(root->opr[1]), root->opr[0]->decl_node->offset, 29);
                 }
-                release_reg();
                 break;
 
             case NODE_IDENT:
-                allocate_reg();
                 if(root->decl_node->global_decl) { // chargement depuis l'espace global
                     lui_inst_create(get_current_reg(), 0x1001);
-                    lw_inst_create(get_current_reg(), root->decl_node->global_decl, get_current_reg());
+                    lw_inst_create(get_current_reg(), root->decl_node->offset, get_current_reg());
                 }
                 else {
                     lw_inst_create(get_current_reg(), root->decl_node->offset, 29);
@@ -176,17 +233,16 @@ int32_t gen_code_expr(node_t root) {
 
             case NODE_INTVAL:
             case NODE_BOOLVAL:
-                allocate_reg();
                 ori_inst_create(get_current_reg(),0,root->value);
                 break;
         }
-        for(int i = 1; i < expr_depth; i++) printf("\t");
+        for(int i = 1; i < expr_depth; i++) printf_level(3,"\t");
         expr_depth--;
         if(root->nature == NODE_IDENT) {
-            printf("%s line %d, reg = %d\n", root->ident, root->lineno, get_current_reg());
+            printf_level(3, "%s line %d, reg = %d\n", root->ident, root->lineno, get_current_reg());
         }
         else {
-            printf("%s line %d, reg = %d\n", node_nature2string(root->nature), root->lineno, get_current_reg());
+            printf_level(3,"%s line %d, reg = %d\n", node_nature2string(root->nature), root->lineno, get_current_reg());
         }
        
         return get_current_reg();
@@ -310,7 +366,7 @@ void gen_code_passe_2(node_t root) {
 
         case NODE_STRINGVAL: 
             if(in_print) { // charger une chaîne globale depuis .data
-                // printf("%s, offset %d\n",root->str, root->offset);
+                printf_level(3,"%s, offset %d\n",root->str, root->offset);
                 lui_inst_create(4,0x1001);
                 ori_inst_create(4,4,root->offset);
                 ori_inst_create(2,0,4);
@@ -374,7 +430,6 @@ void gen_code_passe_2(node_t root) {
         case NODE_NOT:
         case NODE_AFFECT:
             gen_code_expr(root);
-            release_reg();
             break;
 
         case NODE_PRINT:

@@ -30,7 +30,7 @@ void verif_expr(node_t expr) {
     for(int i = 0; i < 22; i++) {
         if((exp_tab[i]).nexpr == expr->nature) {
             expr->type = exp_tab[i].outtype;
-            // printf("i = %d, expr = %s\n",i,node_nature2string(expr->nature));
+            printf_level(4,"i = %d, expr = %s\n",i,node_nature2string(expr->nature));
             if(expr->nops != exp_tab[i].nops) {
                 printf("Error line %d: expected %d operands around \"%s\", got %d\n", expr->lineno, expr->nops, node_nature2symb(exp_tab[i].nexpr), exp_tab[i].nops);
                 exit(1);
@@ -92,7 +92,7 @@ void analyse_passe_1(node_t root) {
             else {
                 if(under_decl) { // déclaration
                     int eadr = env_add_element(root->ident,root);
-                    // printf("Decl de %s, eadr %d, ligne %d\n",root->ident,eadr,root->lineno);
+                    printf_level(4,"Decl de %s, eadr %d, ligne %d\n",root->ident,eadr,root->lineno);
                     root->offset = eadr;
                     root->global_decl = global_env;
                     if(last_type == TYPE_VOID) {
@@ -115,7 +115,7 @@ void analyse_passe_1(node_t root) {
                     }
                 }
             }
-            // printf("%s type is %s\n",root->ident, node_type2string(root->type));
+            printf_level(4,"%s type is %s\n",root->ident, node_type2string(root->type));
             break;
 
         case NODE_STRINGVAL:

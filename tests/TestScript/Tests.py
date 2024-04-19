@@ -24,24 +24,27 @@ def main():
   """
   Parcourt le dossier /path/ et exécute minicc sur chaque fichier .c.
   """
-  path = "../Syntaxe/KO/"
-  for filename in os.listdir(path):
-    if filename.endswith(".c"):
-      filepath = os.path.join(path, filename)
-      print(f"Compiling {filename}...")
-      # Exécution de minicc
-      process = subprocess.run(
-          ["../../minicc", filepath],
-          stderr=subprocess.PIPE,
-          universal_newlines=True,
-      )
-      
-      # Extraction des parties "output" et "erreur"
-      output, error = parse_output(process.stdout)
-      # Affichage des résultats
-      print(f"** Erreurs :**\n{process.stderr}")
-      if output:
-        print(f"** Sortie :**\n{output}")
+  path_arr = ["../Syntaxe/KO/","../Verif/KO"]
+  for i in (0,1):
+    print(path_arr[i])
+    print()
+    for filename in os.listdir(path_arr[i]):
+      if filename.endswith(".c"):
+        filepath = os.path.join(path_arr[i], filename)
+        print(f"Compiling {filename}...")
+        # Exécution de minicc
+        process = subprocess.run(
+            ["../../minicc", filepath],
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+        
+        # Extraction des parties "output" et "erreur"
+        output, error = parse_output(process.stdout)
+        # Affichage des résultats
+        print(f"** Erreurs :**\n{process.stderr}")
+        if output:
+          print(f"** Sortie :**\n{output}")
 
 if __name__ == "__main__":
   main()
