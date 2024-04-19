@@ -2,3 +2,7 @@
 bool fred = true; 
 
 int negated = -fred; 
+
+void main() {
+    
+}

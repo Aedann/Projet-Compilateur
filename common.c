@@ -22,14 +22,120 @@ extern bool stop_after_verif;
 
 
 void parse_args(int argc, char ** argv) {
-    // A implementer (la ligne suivante est a changer)
-    infile = argv[1];
+
+    // setting default values (those not already set in lex)
+    set_max_registers(8);
+
+    if(argc <= 1 || (strcmp(argv[1],"-h") == 0)) {
+        printf("%s",MINICC_HELP);
+        exit(0);
+    }
+
+    int a = 1;
+
+    while(a < argc) {
+        // printf("a = %d, argc = %d, argument = %s\n", a, argc, argv[a]);
+
+        if(strcmp(argv[a],"-h") == 0) {
+            printf("%s",MINICC_HELP);
+            exit(0);
+        }
+
+        else if(strcmp(argv[a],"-b") == 0) {
+            if(a >= argc) {
+                printf("Command-line error : -b can only be used alone\n");
+                exit(-1);
+            }
+
+            printf("MiniCC\nCourtesy of Mathis B. VERMEREN and Nathan D. SEIGNOLE\n");
+            exit(0);
+        }
+
+        else if(strcmp(argv[a],"-o") == 0) {
+            if(++a >= argc) {
+                printf("Command-line error : -o must be followed by a filename\n");
+                exit(-1);
+            }
+            outfile = argv[a];
+        }
+
+        else if(strcmp(argv[a],"-r") == 0) {
+            if(++a >= argc) {
+                printf("Command-line error : -r must be followed by a number of registers\n");
+                exit(-1);
+            }
+            int regn = atoi(argv[a]);
+            if(regn < 4 || regn > 8) {
+                printf("Command-line error : numbers of registers specified (%d) invalid - must be between 4 and 8\n",regn);
+                exit(-1);
+            }
+ 
+            set_max_registers(regn);
+        }
+
+        else if(strcmp(argv[a],"-t") == 0) {
+            if(++a >= argc) {
+                printf("Command-line error : -t must be followed by a trace level\n");
+                exit(-1);
+            }
+            int tracen = atoi(argv[a]);
+            if(tracen < 0 || tracen > 5) {
+                printf("Command-line error : trace level specified (%d) invalid - must be between 4 and 8\n",tracen);
+                exit(-1);
+            }
+ 
+            trace_level = tracen;
+        }
+
+        else if(strcmp(argv[a],"-s") == 0) {
+            if(stop_after_verif) {
+                printf("Command-line error : -s and -v cannot be used together\n");
+                exit(-1);
+            }
+            stop_after_syntax = true;
+        }
+
+        else if(strcmp(argv[a],"-v") == 0) {
+            if(stop_after_syntax) {
+                printf("Command-line error : -v and -s cannot be used together\n");
+                exit(-1);
+            }
+            stop_after_verif = true;
+        }
+
+        else { // let's assume anything left untreated is a filename
+            if(infile != NULL) {
+                printf("Command-line error : Multiple input filenames specified\n");
+                exit(-1);
+            }
+
+            infile = argv[a];
+        }
+        a++;
+    }
+
+    // If after all this, infile is still NULL, that's an error
+    if(infile == NULL) {
+        printf("Command-line error : No input filename specified\n");
+        exit(-1);
+    }
+    FILE * test_fp = fopen(infile,"r");
+    if(test_fp == NULL) {
+        printf("Command-line error : Cannot open file \"%s\"\n",infile);
+        exit(-1);
+    }
+    fclose(test_fp);
+
 }
 
 
 
 void free_nodes(node_t n) {
-    // A implementer
+    for(int e = 0; e < (n->nops); e++) {
+        if(n->opr[e] != NULL) free_nodes(n->opr[e]);
+    }
+    free(n->opr);
+    free(n);
 }
 
 

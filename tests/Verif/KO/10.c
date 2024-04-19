@@ -3,3 +3,7 @@ bool baz = true;
 int qux = 10;
 
 bool is_greater_equal = baz >= qux;
+
+void main() {
+    
+}

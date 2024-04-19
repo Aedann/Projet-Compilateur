@@ -1,5 +1,9 @@
-// Opérations de décalage >>> avec un booléen et un entier
+// Opérations de décalage << avec un booléen et un entier
 int bar = 12;
 bool foo = false;
 
-int result1 = foo >>> bar;
+int result1 = foo << bar;
+
+void main() {
+    
+}

@@ -3,3 +3,7 @@ int baz = 10;
 bool qux = false;
 
 bool result = baz && qux;
+
+void main() {
+    
+}

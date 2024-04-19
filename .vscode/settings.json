@@ -3,6 +3,7 @@
         "defs.h": "c",
         "passe_1.h": "c",
         "miniccutils.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "common.h": "c"
     }
 }

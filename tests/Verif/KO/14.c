@@ -3,3 +3,7 @@ bool foo = true;
 int bar = 5;
 
 bool result = foo || bar;
+
+void main() {
+    
+}

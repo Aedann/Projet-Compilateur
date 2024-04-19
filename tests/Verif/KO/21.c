@@ -2,3 +2,7 @@
 bool baz = false;
 
 int result = ~baz;  
+
+void main() {
+    
+}

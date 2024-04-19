@@ -3,3 +3,7 @@ int bar = 12;
 bool foo = false;
 
 int result1 = foo >> bar;
+
+void main() {
+    
+}

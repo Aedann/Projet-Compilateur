@@ -3,3 +3,7 @@ bool baz = false;
 int qux = 7;
 
 int result1 = baz | qux;
+
+void main() {
+    
+}

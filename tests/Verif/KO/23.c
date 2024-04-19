@@ -1,8 +1,5 @@
-//Declaration de plusieurs de fonctions
-void main(){
+int i;
 
-}
-
-void main(){
-    
+void main() {
+    int i = 0;
 }

@@ -425,53 +425,8 @@ node_t make_stringval(char* str) {
 }
 
 
-/* node_t make_feuille(node_nature nature) {
-    va_list ap;
-    va_start(ap,nops);
-
-    node_t node = calloc(1, sizeof(node_s));
-    node->nature = nature;
-
-    switch(nature) {
-
-        case NODE_IDENT :
-            node->ident = va_arg(ap, char *); // iden
-            break;
-
-        case NODE_TYPE :
-            node->type = va_arg(ap, node_type); // type
-            break;
-
-        case NODE_INTVAL :
-            node->value = va_arg(ap, int); // valeur
-            break;
-
-        case NODE_BOOLVAL :
-            node->value = va_arg(ap, bool); // valeur
-            break;
-
-        case NODE_STRINGVAL :
-            node->str = va_arg(ap, char *); // valeur
-            break;
-
-        case NODE_FUNC :
-            break;
-        
-
-        case NODE_ :
-            break;
-
-        case NONE :
-            break;
-
-        default:
-            break;
-    } 
-} */
-
 void analyse_tree(node_t root) {
     dump_tree(root, "apres_syntaxe.dot");
-
     init_exprverif();
 
     if (!stop_after_syntax) {
@@ -483,7 +438,7 @@ void analyse_tree(node_t root) {
             dump_mips_program(outfile);
             free_program();
         }
-        /* free_global_strings(); */
+        free_global_strings();
     }
     free_nodes(root);
 }
@@ -498,14 +453,3 @@ void yyerror(node_t * program_root, char * s) {
     fprintf(stderr, "Error line %d: %s\n", yylineno, s);
     exit(1);
 }
-
-
-
-
-
-/*
-
-
-
-
-*/

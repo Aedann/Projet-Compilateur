@@ -1,6 +1,24 @@
+// issu en partie de l'exemple de cppreference.com
+
 void main() {
     int a = 10;
     int b = 5;
+    int i = 0;
+
+    // CHIFFRE_NON_NUL rule
+    int chiffreNonNul = 5;
+
+    // ENTIER_DEC rule
+    int entierDec = 12345;
+
+    // ENTIER_HEXA rule
+    int entierHexa = 0x1A;
+
+    // LETTRE_HEXA rule
+    int lettreHexa = 0xE;
+
+    // ENTIER rule
+    int entier = entierDec;
 
     // Arithmetic operators
     int sum = a + b;
@@ -10,17 +28,17 @@ void main() {
     int remainder = a % b;
 
     // Comparison operators
-    int greaterThan = a > b;
-    int lessThan = a < b;
-    int notEqual = a != b;
-    int greaterThanOrEqual = a >= b;
-    int lessThanOrEqual = a <= b;
-    int equal = a == b;
+    bool greaterThan = a > b;
+    bool lessThan = a < b;
+    bool notEqual = a != b;
+    bool greaterThanOrEqual = a >= b;
+    bool lessThanOrEqual = a <= b;
+    bool equal = a == b;
 
     // Logical operators
-    int logicalAnd = (a > 0) && (b > 0);
-    int logicalOr = (a > 0) || (b > 0);
-    int logicalNot = !(a > 0);
+    bool logicalAnd = (a > 0) && (b > 0);
+    bool logicalOr = (a > 0) || (b > 0);
+    bool logicalNot = !(a > 0);
 
     // Bitwise operators
     int bitwiseAnd = a & b;
@@ -45,7 +63,7 @@ void main() {
         // Code to be executed repeatedly while booleanVariable is true
     }
 
-    for (int i = 0; i < 10; i++) {
+    for (i = 0; i < 10; i=i+1) {
         // Code to be executed repeatedly for each value of i from 0 to 9
     }
 
@@ -53,19 +71,6 @@ void main() {
         // Code to be executed at least once, and repeatedly while booleanVariable is true
     } while (booleanVariable);
 
-    // CHIFFRE_NON_NUL rule
-    int chiffreNonNul = 5;
-
-    // ENTIER_DEC rule
-    int entierDec = 12345;
-
-    // ENTIER_HEXA rule
-    int entierHexa = 0x1A;
-
-    // ENTIER rule
-    int entier = entierDec;
-
-    print("CHAINE", chaine,"\n");
     print("CHIFFRE_NON_NUL: ", chiffreNonNul,"\n");
     print("ENTIER_DEC: ", entierDec,"\n");
     print("LETTRE_HEXA: ", lettreHexa,"\n");
@@ -96,5 +101,4 @@ void main() {
     print("Left shift: ", leftShift,"\n");
     print("Right shift: ", rightShift,"\n");
 
-    return 0;
 }

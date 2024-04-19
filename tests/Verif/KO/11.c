@@ -1,5 +1,9 @@
 // Operation == avec des types différents
-bool str1 = false;
-int str2 = 3;
+bool fat1 = false;
+int fat2 = 3;
 
-bool are_equal = str1 == str2;
+bool are_equal = fat1 == fat2;
+
+void main() {
+    
+}

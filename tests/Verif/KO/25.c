@@ -1,6 +1,6 @@
-//Inserer erreur dans le code
+int g = 4;
+int i = g;
 
-//Signe = avec aucune expression derrière
-//Erreur attendue : "Expected 2 operands around '=' sign on line %d\n"
-int i = 0;
-i =;
+void main() {
+    print(i);
+}
